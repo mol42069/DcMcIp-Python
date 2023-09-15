@@ -29,11 +29,12 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    global msg
+    global msg, running
     if message.author != client.user:
         temp = True
         channel = message.channel
         if message.content == '!startIPbot':
+            running = True
             async for b in channel.history(limit=100):
                 if b.author == client.user:  # client.user or bot.user according to what you have named it
                     await b.delete()
@@ -43,30 +44,33 @@ async def on_message(message):
             await message.delete()
 
         elif message.content == '!start':
-
+            running = True
             #msg = await channel.send('Send me that ✅ reaction, to get the Minecraft ip')
             await message.delete()
             #await msg.add_reaction('✅')
 
 
         elif message.content == '!stop':
+            running = False
             if msg is not None:
                 await message.delete()
                 await msg.delete()
-                quit(0)
+                return
+                #quit(0)
 
         else:
             if msg is not None:
                 temp = False
                 omsg = msg
                 # await msg.delete()
+        if running:
 
-        msg = await channel.send('Send me that ✅ reaction, to get the Minecraft ip')
-        await msg.add_reaction('▫️')
-        await msg.add_reaction('✅')
+            msg = await channel.send('Send me that ✅ reaction, to get the Minecraft ip')
+            await msg.add_reaction('▫️')
+            await msg.add_reaction('✅')
 
-        if not temp:
-            await omsg.delete()
+            if not temp:
+                await omsg.delete()
 
 
 
