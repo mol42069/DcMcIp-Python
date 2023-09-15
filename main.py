@@ -32,27 +32,38 @@ async def on_ready():
 @client.event
 async def on_message(message):
     global msg
-    if message.content == '!startIPbot':
-        channel =  message.channel # dm channel you want to clear
-        async for b in channel.history(limit=100):
-            if b.author == client.user:  # client.user or bot.user according to what you have named it
-                await b.delete()
-
-        msg = await channel.send('Send me that ✅ reaction, to get the Minecraft ip')
-        await msg.add_reaction('✅')
-        await message.delete()
-
-    if message.content == '!start':
+    if message.author != client.user:
         channel = message.channel
+        if message.content == '!startIPbot':
+            async for b in channel.history(limit=100):
+                if b.author == client.user:  # client.user or bot.user according to what you have named it
+                    await b.delete()
+
+            #msg = await channel.send('Send me that ✅ reaction, to get the Minecraft ip')
+            #await msg.add_reaction('✅')
+            await message.delete()
+
+        elif message.content == '!start':
+
+            #msg = await channel.send('Send me that ✅ reaction, to get the Minecraft ip')
+            await message.delete()
+            #await msg.add_reaction('✅')
+
+
+        elif message.content == '!stop':
+            if msg is not None:
+                await message.delete()
+                await msg.delete()
+                quit(0)
+
+        else:
+            if msg is not None:
+                await msg.delete()
+
         msg = await channel.send('Send me that ✅ reaction, to get the Minecraft ip')
-        await message.delete()
         await msg.add_reaction('✅')
 
 
-    if message.content == '!stop':
-        await message.delete()
-        await msg.delete()
-        quit(0)
 
 @client.event
 async def on_reaction_add(reaction, user):
@@ -81,4 +92,4 @@ def fetchip():
     return r.text
 
 fetchip()
-client.run('HERE YOUR TOKEN')
+client.run('HERE YOUR DISCORD TOKEN')
