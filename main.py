@@ -1,5 +1,3 @@
-import asyncio
-
 import discord
 from discord.ext import commands
 import requests
@@ -33,6 +31,7 @@ async def on_ready():
 async def on_message(message):
     global msg
     if message.author != client.user:
+        temp = True
         channel = message.channel
         if message.content == '!startIPbot':
             async for b in channel.history(limit=100):
@@ -65,9 +64,9 @@ async def on_message(message):
         msg = await channel.send('Send me that ✅ reaction, to get the Minecraft ip')
         await msg.add_reaction('▫️')
         await msg.add_reaction('✅')
+
         if not temp:
             await omsg.delete()
-
 
 
 
@@ -97,5 +96,4 @@ def fetchip():
     r = requests.get( 'https://ipinfo.io/ip', auth=('user', 'pass'))
     return r.text
 
-fetchip()
 client.run('HERE YOUR DISCORD TOKEN')
