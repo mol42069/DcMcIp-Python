@@ -58,10 +58,15 @@ async def on_message(message):
 
         else:
             if msg is not None:
-                await msg.delete()
+                temp = False
+                omsg = msg
+                # await msg.delete()
 
         msg = await channel.send('Send me that ✅ reaction, to get the Minecraft ip')
         await msg.add_reaction('✅')
+        if not temp:
+            await omsg.delete()
+
 
 
 
