@@ -9,6 +9,7 @@ client = discord.Client(intents=intents)
 bot = commands.Bot(command_prefix="$", intents = intents)
 msg = None
 m = None
+running = False
 
 
 @client.event
@@ -33,24 +34,23 @@ async def on_message(message):
     if message.author != client.user:
         temp = True
         channel = message.channel
-        if message.content == '!startIPbot':
+
+        if message.content == '!startIPbot' and "besserer-mensch" in [y.name.lower() for y in message.author.roles]:
             running = True
             async for b in channel.history(limit=100):
                 if b.author == client.user:  # client.user or bot.user according to what you have named it
                     await b.delete()
-
             #msg = await channel.send('Send me that ✅ reaction, to get the Minecraft ip')
             #await msg.add_reaction('✅')
             await message.delete()
 
-        elif message.content == '!start':
+        elif message.content == '!start' and "besserer-mensch" in [y.name.lower() for y in message.author.roles]:
             running = True
             #msg = await channel.send('Send me that ✅ reaction, to get the Minecraft ip')
             await message.delete()
             #await msg.add_reaction('✅')
 
-
-        elif message.content == '!stop':
+        elif message.content == '!stop' and "besserer-mensch" in [y.name.lower() for y in message.author.roles]:
             running = False
             if msg is not None:
                 await message.delete()
@@ -58,18 +58,17 @@ async def on_message(message):
                 return
                 #quit(0)
 
-        else:
+        if running:
             if msg is not None:
                 temp = False
                 omsg = msg
                 # await msg.delete()
-        if running:
 
             msg = await channel.send('Send me that ✅ reaction, to get the Minecraft ip')
             await msg.add_reaction('▫️')
             await msg.add_reaction('✅')
 
-            if not temp:
+            if not temp and omsg is not None:
                 await omsg.delete()
 
 
