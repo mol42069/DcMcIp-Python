@@ -75,7 +75,7 @@ async def on_message(message):
 async def on_reaction_add(reaction, user):
 
     global msg, m
-    if msg is not None and user != client.user:
+    if msg is not None and user != client.user and reaction.emoji == "✅":
 
         ip = str(fetchip() + ':25565')
 
