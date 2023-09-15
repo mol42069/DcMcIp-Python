@@ -10,6 +10,7 @@ intents.message_content = True
 client = discord.Client(intents=intents)
 bot = commands.Bot(command_prefix="$", intents = intents)
 msg = None
+m = None
 
 
 @client.event
@@ -31,13 +32,24 @@ async def on_ready():
 @client.event
 async def on_message(message):
     global msg
-    if message.content.startswith('!startIPbot'):
+    if message.content == '!startIPbot':
+        channel =  message.channel # dm channel you want to clear
+        async for b in channel.history(limit=100):
+            if b.author == client.user:  # client.user or bot.user according to what you have named it
+                await b.delete()
+
+        msg = await channel.send('Send me that ✅ reaction, to get the Minecraft ip')
+        await msg.add_reaction('✅')
+        await message.delete()
+
+    if message.content == '!start':
         channel = message.channel
         msg = await channel.send('Send me that ✅ reaction, to get the Minecraft ip')
         await message.delete()
         await msg.add_reaction('✅')
 
-    if message.content.startswith('!stopIPbot'):
+
+    if message.content == '!stop':
         await message.delete()
         await msg.delete()
         quit(0)
@@ -45,12 +57,20 @@ async def on_message(message):
 @client.event
 async def on_reaction_add(reaction, user):
 
-    global msg
+    global msg, m
     if msg is not None and user != client.user:
 
         ip = str(fetchip() + ':25565')
+
         #user = await client.fetch_user(reaction.author.id)
-        await user.send(ip)
+        m = await user.send("...")
+        dmchannel =  m.channel # dm channel you want to clear
+        async for message in dmchannel.history(limit=100):
+            if message.author == client.user:  # client.user or bot.user according to what you have named it
+                await message.delete()
+
+        m = await user.send(ip)
+
         await msg.clear_reaction('✅')
         await msg.add_reaction('✅')
 
@@ -61,4 +81,4 @@ def fetchip():
     return r.text
 
 fetchip()
-client.run('HERE THE DISCORD BOT TOKEN')
+client.run('HERE YOUR TOKEN')
