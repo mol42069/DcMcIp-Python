@@ -59,6 +59,7 @@ async def on_message(message):
                 #quit(0)
 
         elif message.content == '!McStart' and "besserer-mensch" in [y.name.lower() for y in message.author.roles]:
+            await message.delete()
             os.system(
                 'x-terminal-emulator -e "$echo here-your-pw" | sudo -S java -Xms1G -Xmx12G -jar server.jar nogui')
 
