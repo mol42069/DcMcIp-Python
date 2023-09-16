@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 import requests
-
+import os
 intents = discord.Intents.default()
 intents.message_content = True
 
@@ -58,6 +58,10 @@ async def on_message(message):
                 return
                 #quit(0)
 
+        elif message.content == '!McStart' and "besserer-mensch" in [y.name.lower() for y in message.author.roles]:
+            os.system(
+                'x-terminal-emulator -e "$echo here-your-pw" | sudo -S java -Xms1G -Xmx12G -jar server.jar nogui')
+
         if running:
             if msg is not None:
                 temp = False
@@ -92,6 +96,8 @@ async def on_reaction_add(reaction, user):
 
         await msg.clear_reaction('✅')
         await msg.add_reaction('✅')
+
+
 
 
 
