@@ -14,7 +14,7 @@ McRunning = False
 
 user_role = 'YOUR USER-ROLE HERE'   # must be in lowercase
 channel_name = 'THE DISCORD-CHANNEL NAME HERE'  # must be identical to the discord-channel-name
-discord_Token = 'YOUR DISCORD TOKEN HERE'       # just copy it here
+discord_Token = 'YOUR DISCORD TOKEN HERE'       # just copy it here.
 
 @client.event
 async def on_ready():
